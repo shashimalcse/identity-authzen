@@ -17,7 +17,7 @@
 
     <modules>
         <module>org.wso2.carbon.identity.authzen.core</module>
-        <module>org.wso2.carbon.identity.authzen.pdp</module>
+        <module>org.wso2.carbon.identity.authzen.evalution</module>
         <module>org.wso2.carbon.identity.authzen.pip</module>
         <module>org.wso2.carbon.identity.authzen.api</module>
         <module>org.wso2.carbon.identity.authzen.search</module>

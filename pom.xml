@@ -27,7 +27,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.identity.authzen</groupId>
-                <artifactId>org.wso2.carbon.identity.authzen.pdp</artifactId>
+                <artifactId>org.wso2.carbon.identity.authzen.evalution</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -84,6 +84,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.identity.framework</groupId>
+                <artifactId>org.wso2.carbon.identity.application.authentication.framework</artifactId>
+                <version>${carbon.identity.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.framework</groupId>
                 <artifactId>org.wso2.carbon.identity.api.resource.mgt</artifactId>
                 <version>${carbon.identity.framework.version}</version>
             </dependency>
@@ -96,6 +101,16 @@
                 <groupId>org.wso2.carbon.identity.framework</groupId>
                 <artifactId>org.wso2.carbon.identity.user.store.configuration</artifactId>
                 <version>${carbon.identity.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.framework</groupId>
+                <artifactId>org.wso2.carbon.identity.multi.attribute.login.mgt</artifactId>
+                <version>${carbon.identity.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.identity.inbound.auth.oauth2</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth</artifactId>
+                <version>${carbon.identity.oauth.version}</version>
             </dependency>
 
             <dependency>
@@ -119,11 +134,27 @@
                 <artifactId>jackson-annotations</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation.api.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxrs</artifactId>
                 <version>${cxf.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.service.http</artifactId>
+                <version>${osgi.http.version}</version>
             </dependency>
 
             <dependency>
@@ -166,6 +197,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <argLine>-Djdk.attach.allowAttachSelf=true -XX:+EnableDynamicAgentLoading</argLine>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -176,15 +210,19 @@
         <maven.compiler.release>21</maven.compiler.release>
 
         <carbon.kernel.version>4.10.33</carbon.kernel.version>
-        <carbon.identity.framework.version>7.8.599-SNAPSHOT</carbon.identity.framework.version>
+        <carbon.identity.framework.version>7.8.685</carbon.identity.framework.version>
+        <carbon.identity.oauth.version>7.4.51</carbon.identity.oauth.version>
         <osgi.core.version>6.0.0</osgi.core.version>
         <osgi.annotation.version>1.4.0</osgi.annotation.version>
+        <osgi.http.version>1.2.1</osgi.http.version>
+        <javax.servlet.api.version>3.1.0</javax.servlet.api.version>
         <jackson.version>2.16.1</jackson.version>
+        <validation.api.version>2.0.1.Final</validation.api.version>
         <cxf.version>3.5.11</cxf.version>
         <testng.version>7.10.1</testng.version>
         <mockito.version>5.3.1</mockito.version>
 
-        <maven.bundle.plugin.version>3.2.0</maven.bundle.plugin.version>
+        <maven.bundle.plugin.version>5.1.9</maven.bundle.plugin.version>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
     </properties>

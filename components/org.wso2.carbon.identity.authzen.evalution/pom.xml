@@ -11,24 +11,42 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>org.wso2.carbon.identity.authzen.core</artifactId>
+    <artifactId>org.wso2.carbon.identity.authzen.evalution</artifactId>
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - Identity AuthZEN Core</name>
+    <name>WSO2 Carbon - Identity AuthZEN Evalution</name>
 
     <dependencies>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
+            <groupId>org.wso2.carbon.identity.authzen</groupId>
+            <artifactId>org.wso2.carbon.identity.authzen.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.authzen</groupId>
+            <artifactId>org.wso2.carbon.identity.authzen.pip</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.identity.inbound.auth.oauth2</groupId>
+            <artifactId>org.wso2.carbon.identity.oauth</artifactId>
             <scope>provided</scope>
         </dependency>
-<dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <scope>test</scope>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -43,15 +61,8 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>
-                            org.wso2.carbon.identity.authzen.core;version="${project.version}",
-                            org.wso2.carbon.identity.authzen.core.exception;version="${project.version}",
-                            org.wso2.carbon.identity.authzen.core.model;version="${project.version}",
-                            org.wso2.carbon.identity.authzen.core.validation;version="${project.version}"
+                            org.wso2.carbon.identity.authzen.evalution;version="${project.version}"
                         </Export-Package>
-                        <Import-Package>
-                            com.fasterxml.jackson.annotation,
-                            *
-                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
