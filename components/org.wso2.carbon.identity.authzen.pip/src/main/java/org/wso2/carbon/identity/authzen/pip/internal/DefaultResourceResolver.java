@@ -3,7 +3,9 @@ package org.wso2.carbon.identity.authzen.pip.internal;
 import org.wso2.carbon.identity.api.resource.mgt.APIResourceManager;
 import org.wso2.carbon.identity.api.resource.mgt.APIResourceMgtException;
 import org.wso2.carbon.identity.application.common.model.APIResource;
+import org.wso2.carbon.identity.application.common.model.AuthorizedAPI;
 import org.wso2.carbon.identity.application.common.model.Scope;
+import org.wso2.carbon.identity.application.mgt.AuthorizedAPIManagementService;
 import org.wso2.carbon.identity.authzen.core.exception.AuthZENClientException;
 import org.wso2.carbon.identity.authzen.core.exception.AuthZENErrorCode;
 import org.wso2.carbon.identity.authzen.core.exception.AuthZENException;
@@ -13,6 +15,7 @@ import org.wso2.carbon.identity.authzen.pip.ResourceContext;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -47,14 +50,53 @@ final class DefaultResourceResolver {
                 throw new AuthZENClientException(AuthZENErrorCode.MISSING_RESOURCE,
                         "API resource not found for identifier: " + resource.getId());
             }
+
+            String appId = extractAppId(resource);
+            List<String> scopes = appId != null
+                    ? resolveAppScopedScopes(appId, apiResource.getId(), tenantDomain)
+                    : resolveScopes(apiResource.getScopes());
+
             return new ResourceContext(
                     apiResource.getIdentifier() != null ? apiResource.getIdentifier() : resource.getId(),
                     RESOURCE_TYPE_API_RESOURCE,
-                    resolveScopes(apiResource.getScopes()),
-                    null);
+                    scopes,
+                    appId);
         } catch (APIResourceMgtException e) {
             throw new AuthZENServerException(AuthZENErrorCode.INTERNAL_ERROR,
                     "Error while resolving resource: " + resource.getId());
+        }
+    }
+
+    private String extractAppId(ResourceEntity resource) {
+
+        Map<String, Object> properties = resource.getProperties();
+        if (properties == null) {
+            return null;
+        }
+        Object appId = properties.get("app_id");
+        return (appId instanceof String && !((String) appId).isBlank()) ? (String) appId : null;
+    }
+
+    private List<String> resolveAppScopedScopes(String appId, String apiResourceId, String tenantDomain)
+            throws AuthZENServerException {
+
+        AuthorizedAPIManagementService authorizedAPIManagementService =
+                PIPDataHolder.getAuthorizedAPIManagementService();
+        if (authorizedAPIManagementService == null) {
+            throw new AuthZENServerException(AuthZENErrorCode.INTERNAL_ERROR,
+                    "AuthorizedAPIManagementService is not available.");
+        }
+
+        try {
+            AuthorizedAPI authorizedAPI =
+                    authorizedAPIManagementService.getAuthorizedAPI(appId, apiResourceId, tenantDomain);
+            if (authorizedAPI == null) {
+                return Collections.emptyList();
+            }
+            return resolveScopes(authorizedAPI.getScopes());
+        } catch (Exception e) {
+            throw new AuthZENServerException(AuthZENErrorCode.INTERNAL_ERROR,
+                    "Error while resolving app-scoped API resource for app: " + appId);
         }
     }
 

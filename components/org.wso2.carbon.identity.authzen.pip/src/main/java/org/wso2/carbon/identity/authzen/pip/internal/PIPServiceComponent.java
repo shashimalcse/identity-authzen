@@ -8,6 +8,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.identity.api.resource.mgt.APIResourceManager;
+import org.wso2.carbon.identity.application.mgt.AuthorizedAPIManagementService;
 import org.wso2.carbon.identity.authzen.pip.PIPService;
 import org.wso2.carbon.identity.multi.attribute.login.mgt.MultiAttributeLoginService;
 import org.wso2.carbon.user.core.service.RealmService;
@@ -30,6 +31,7 @@ public class PIPServiceComponent {
         PIPDataHolder.setRealmService(null);
         PIPDataHolder.setMultiAttributeLoginService(null);
         PIPDataHolder.setApiResourceManager(null);
+        PIPDataHolder.setAuthorizedAPIManagementService(null);
     }
 
     @Reference(
@@ -81,5 +83,24 @@ public class PIPServiceComponent {
     protected void unsetAPIResourceManager(APIResourceManager apiResourceManager) {
 
         PIPDataHolder.setApiResourceManager(null);
+    }
+
+    @Reference(
+            name = "org.wso2.carbon.identity.application.mgt.AuthorizedAPIManagementService",
+            service = AuthorizedAPIManagementService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetAuthorizedAPIManagementService"
+    )
+    protected void setAuthorizedAPIManagementService(
+            AuthorizedAPIManagementService authorizedAPIManagementService) {
+
+        PIPDataHolder.setAuthorizedAPIManagementService(authorizedAPIManagementService);
+    }
+
+    protected void unsetAuthorizedAPIManagementService(
+            AuthorizedAPIManagementService authorizedAPIManagementService) {
+
+        PIPDataHolder.setAuthorizedAPIManagementService(null);
     }
 }
